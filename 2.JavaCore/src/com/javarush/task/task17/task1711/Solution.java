@@ -24,38 +24,55 @@ public class Solution {
     public static void main(String[] args) throws IOException{
         //start here - начни тут
 
-        CrudWrapper cw = new CrudWrapper();
-        MyCrud p =null;
-
         switch (args[0])
         {
             case MyDataParams.CREATE:
             {
+                String[][] myParams = helperMultiCrud(3,args);
+
                 synchronized (allPeople) {
-                    p = new MyCreate(args);
+                    for (String[] i :
+                            myParams) {
+                        new MyCreate(i).executeCommand();
+                    }
                 }
             }
             case MyDataParams.INFO:
             {
+                String[][] myParams = helperMultiCrud(1,args);
+
                 synchronized (allPeople) {
-                    p = new MyInfo(args);
+                    for (String[] i :
+                            myParams) {
+                        new MyCreate(i).executeCommand();
+                    }
                 }
             }
             case MyDataParams.DELETE:
             {
+                String[][] myParams = helperMultiCrud(1,args);
+
                 synchronized (allPeople) {
-                    p = new MyDelete(args);
+                    for (String[] i :
+                            myParams) {
+                        new MyCreate(i).executeCommand();
+                    }
                 }
             }
             case MyDataParams.UPDATE:
             {
+                String[][] myParams = helperMultiCrud(4,args);
+
                 synchronized (allPeople) {
-                    p = new MyUpdate(args);
+                    for (String[] i :
+                            myParams) {
+                        new MyCreate(i).executeCommand();
+                    }
                 }
             }
         }
 
-        p.executeCommand();
+        //p.executeCommand();
 //       p = CrudWrapper.takeMyCRUD(new String[]{"-i","2"});
 //       p.executeCommand();
 //        p = CrudWrapper.takeMyCRUD(new String[]{"-u","2","Annette","ж","19/04/1997"});
@@ -70,6 +87,22 @@ public class Solution {
 
 //        System.out.println(allPeople.size());
     }
+
+    public static String[][] helperMultiCrud(int step,String[] myArgs)
+    {
+        int counter =0;
+        String[] myNewArgs = new String[myArgs.length-1];
+        System.arraycopy(myArgs,1,myNewArgs,0,myArgs.length);
+        String[][] mulArgs = new String[(int)(myNewArgs.length/step)][step];
+        for (int j = 0; j < mulArgs.length; j++) {
+            for (int i = 0; i < step ; i++) {
+                mulArgs[j][i]=myNewArgs[counter];
+                counter++;
+            }
+        }
+        return mulArgs;
+    }
+
 
     public static class MyDataParams
     {
@@ -210,37 +243,33 @@ public class Solution {
             upateByindex();
         }
     }
-    public static class CrudWrapper
-    {
-        MyCreate myCreate;
-        MyUpdate myUpdate;
-        MyInfo   myInfo;
-        MyDelete myDelete;
-
-        public static MyCrud takeMyCRUD(String[] args)
-        {
-            switch (args[0])
-            {
-                case MyDataParams.CREATE:
-                {
-                    return new MyCreate(args);
-                }
-                case MyDataParams.INFO:
-                {
-                    return new MyInfo(args);
-                }
-                case MyDataParams.DELETE:
-                {
-                    return new MyDelete(args);
-                }
-                case MyDataParams.UPDATE:
-                {
-                    return new MyUpdate(args);
-                }
-            }
-            return null;
-        }
-    }
+//    public static class CrudWrapper
+//    {
+//
+//        public static MyCrud takeMyCRUD(String[] args)
+//        {
+//            switch (args[0])
+//            {
+//                case MyDataParams.CREATE:
+//                {
+//                    return new MyCreate(args);
+//                }
+//                case MyDataParams.INFO:
+//                {
+//                    return new MyInfo(args);
+//                }
+//                case MyDataParams.DELETE:
+//                {
+//                    return new MyDelete(args);
+//                }
+//                case MyDataParams.UPDATE:
+//                {
+//                    return new MyUpdate(args);
+//                }
+//            }
+//            return null;
+//        }
+//    }
 
 
 }
