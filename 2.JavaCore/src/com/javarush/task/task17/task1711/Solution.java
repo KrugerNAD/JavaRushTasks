@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /*
 CRUD
@@ -23,12 +20,16 @@ public class Solution {
 
     public static void main(String[] args) throws IOException{
         //start here - начни тут
-
+         //String[] args = new String[]{"-c","Annette","ж","19/04/1997","Annette1","ж","19/04/2997","Вася","м","21/04/2997"};
         switch (args[0])
         {
             case MyDataParams.CREATE:
             {
                 String[][] myParams = helperMultiCrud(3,args);
+                for (String[] i :
+                       myParams ) {
+                    System.out.println(Arrays.toString(i));
+                }
 
                 synchronized (allPeople) {
                     for (String[] i :
@@ -36,6 +37,7 @@ public class Solution {
                         new MyCreate(i).executeCommand();
                     }
                 }
+                break;
             }
             case MyDataParams.INFO:
             {
@@ -44,9 +46,10 @@ public class Solution {
                 synchronized (allPeople) {
                     for (String[] i :
                             myParams) {
-                        new MyCreate(i).executeCommand();
+                        new MyInfo(i).executeCommand();
                     }
                 }
+                break;
             }
             case MyDataParams.DELETE:
             {
@@ -55,9 +58,10 @@ public class Solution {
                 synchronized (allPeople) {
                     for (String[] i :
                             myParams) {
-                        new MyCreate(i).executeCommand();
+                        new MyDelete(i).executeCommand();
                     }
                 }
+                break;
             }
             case MyDataParams.UPDATE:
             {
@@ -66,33 +70,20 @@ public class Solution {
                 synchronized (allPeople) {
                     for (String[] i :
                             myParams) {
-                        new MyCreate(i).executeCommand();
+                        new MyUpdate(i).executeCommand();
                     }
                 }
+                break;
             }
         }
 
-        //p.executeCommand();
-//       p = CrudWrapper.takeMyCRUD(new String[]{"-i","2"});
-//       p.executeCommand();
-//        p = CrudWrapper.takeMyCRUD(new String[]{"-u","2","Annette","ж","19/04/1997"});
-////        p = CrudWrapper.takeMyCRUD(new String[]{"-i","3"});
-//        p.executeCommand();
-////        p = CrudWrapper.takeMyCRUD(new String[]{"-d","3"});
-////        p.executeCommand();
-////        p= CrudWrapper.takeMyCRUD(new String[]{"-d","2"});
-////        p.executeCommand();
-//        p = CrudWrapper.takeMyCRUD(new String[]{"-i","2"});
-//        p.executeCommand();
-
-//        System.out.println(allPeople.size());
     }
 
     public static String[][] helperMultiCrud(int step,String[] myArgs)
     {
         int counter =0;
         String[] myNewArgs = new String[myArgs.length-1];
-        System.arraycopy(myArgs,1,myNewArgs,0,myArgs.length);
+        System.arraycopy(myArgs,1,myNewArgs,0,myNewArgs.length);
         String[][] mulArgs = new String[(int)(myNewArgs.length/step)][step];
         for (int j = 0; j < mulArgs.length; j++) {
             for (int i = 0; i < step ; i++) {
@@ -145,9 +136,9 @@ public class Solution {
 
         public MyCreate(String[] mArgs)
         {
-            this.swap = MyDataParams.sexIs(mArgs[2]);
-            this.name = mArgs[1];
-            this.birthDate = MyDataParams.homyDate(mArgs[3]);
+            this.swap = MyDataParams.sexIs(mArgs[1]);
+            this.name = mArgs[0];
+            this.birthDate = MyDataParams.homyDate(mArgs[2]);
 
         }
         private  void  createPersonBySex()
@@ -180,7 +171,7 @@ public class Solution {
 
         public MyInfo(String[] myArgs)
         {
-            this.index = Integer.parseInt(myArgs[1]);
+            this.index = Integer.parseInt(myArgs[0]);
         }
 
         void infoByID()
@@ -201,7 +192,7 @@ public class Solution {
         int index;
 
         public MyDelete(String[] myArgs) {
-            this.index = Integer.parseInt(myArgs[1]);
+            this.index = Integer.parseInt(myArgs[0]);
         }
         void deletById()
         {
@@ -224,10 +215,10 @@ public class Solution {
 
         public MyUpdate(String[] mArgs)
         {
-            this.index = Integer.parseInt(mArgs[1]);
-            this.name = mArgs[2];
-            this.sex = MyDataParams.sexIs(mArgs[3]);
-            this.birthDate = MyDataParams.homyDate(mArgs[4]);
+            this.index = Integer.parseInt(mArgs[0]);
+            this.name = mArgs[1];
+            this.sex = MyDataParams.sexIs(mArgs[2]);
+            this.birthDate = MyDataParams.homyDate(mArgs[3]);
 
         }
 
@@ -243,34 +234,5 @@ public class Solution {
             upateByindex();
         }
     }
-//    public static class CrudWrapper
-//    {
-//
-//        public static MyCrud takeMyCRUD(String[] args)
-//        {
-//            switch (args[0])
-//            {
-//                case MyDataParams.CREATE:
-//                {
-//                    return new MyCreate(args);
-//                }
-//                case MyDataParams.INFO:
-//                {
-//                    return new MyInfo(args);
-//                }
-//                case MyDataParams.DELETE:
-//                {
-//                    return new MyDelete(args);
-//                }
-//                case MyDataParams.UPDATE:
-//                {
-//                    return new MyUpdate(args);
-//                }
-//            }
-//            return null;
-//        }
-//    }
-
-
 }
 
